@@ -31,9 +31,8 @@ public class Appointment {
     @JsonIgnore //this filed will not be added as json inside another dto
     private Patient patient;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(nullable = false)
-    @ManyToOne
+//    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     @ToString.Exclude
     @JsonIgnore

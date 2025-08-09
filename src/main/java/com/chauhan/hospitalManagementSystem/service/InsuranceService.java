@@ -39,7 +39,7 @@ public class InsuranceService {
     public Patient removeInsuranceOfAPatient(Long patientId) {
         Patient patient = patientRepository.findById(patientId).orElseThrow();
 
-        patient.setInsurance(null); // dirty patient
+        patient.setInsurance(null); // dirty patient [removing insurance]
 
         return patient;
     }
