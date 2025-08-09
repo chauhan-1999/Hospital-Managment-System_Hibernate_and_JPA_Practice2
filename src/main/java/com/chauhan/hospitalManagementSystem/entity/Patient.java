@@ -37,13 +37,13 @@ public class Patient {
     private LocalDateTime createdAt;
 
 //    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_insurance", unique = true)
     private Insurance insurance; // owning side
 //
 //    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // inverse side
 //    @ToString.Exclude
-//    @OneToMany
-//    private Set<Appointment> appointments = new HashSet<>();
+    @OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)//inverse side [whenever we delete the patient then all the appointments will be deleted of this patient]
+    private Set<Appointment> appointments = new HashSet<>();
 
 }

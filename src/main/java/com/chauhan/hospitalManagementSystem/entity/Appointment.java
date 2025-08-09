@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
+@ToString //not good practice
 public class Appointment {
 
     @Id
@@ -27,15 +27,15 @@ public class Appointment {
 
     @ManyToOne // owning side
     @JoinColumn(nullable = false)
-//    @ToString.Exclude
-//    @JsonIgnore
+    @ToString.Exclude //either you do this or set fetchType.Lazy [to avoid stackOverFlow error]
+    @JsonIgnore //this filed will not be added as json inside another dto
     private Patient patient;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(nullable = false)
-//    @ToString.Exclude
-//    @JsonIgnore
     @ManyToOne
     @JoinColumn(nullable = false)
+    @ToString.Exclude
+    @JsonIgnore
     private Doctor doctor;//owning side
 }

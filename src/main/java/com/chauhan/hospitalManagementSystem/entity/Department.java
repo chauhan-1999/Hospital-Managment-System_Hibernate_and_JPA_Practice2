@@ -27,6 +27,7 @@ public class Department {
     private Doctor headDoctor;
 
     @ManyToMany  //Hibernate will create the Department_doctors table for many to many mapping
-    private Set<Doctor> doctors = new HashSet<>();//if we don't intialize then hibernate will gives the error whenever we tries to fill the data into it
+    private Set<Doctor> doctors = new HashSet<>();//if we don't intialize then hibernate will give
+    // the error whenever we tries to fill the data into it
 
 }

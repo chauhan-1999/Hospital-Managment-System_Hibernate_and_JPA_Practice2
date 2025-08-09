@@ -34,7 +34,7 @@ public class Insurance {
     private LocalDateTime createdAt;
 //
     @OneToOne(mappedBy = "insurance")
-//    @ToString.Exclude
+    @ToString.Exclude //to avoid stackOverFlow error [now patient would not be printed]
     private Patient patient; // inverse side
 
 }
