@@ -1,33 +1,36 @@
 package com.chauhan.hospitalManagementSystem.service;
 
+import com.chauhan.hospitalManagementSystem.dto.PatientResponseDto;
 import com.chauhan.hospitalManagementSystem.entity.Patient;
 import com.chauhan.hospitalManagementSystem.repository.PatientRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final ModelMapper modelMapper;
 
     @Transactional
-    public void testPatientTransaction() {
-
-        Patient p1 = patientRepository.findById(1L).orElseThrow();
-        Patient p2 = patientRepository.findById(1L).orElseThrow();
-
-        System.out.println(p1 +"  "+p2);
-        System.out.println(p1 == p2);
-
-        p1.setName("Random Name");
+    public PatientResponseDto getPatientById(Long patientId) {
+        Patient patient = patientRepository.findById(patientId).orElseThrow(() -> new EntityNotFoundException("Patient Not " +
+                "Found with id: " + patientId));
+        return modelMapper.map(patient, PatientResponseDto.class);
     }
 
-    @Transactional
-    public void deletePatient(Long patientId) {
-        patientRepository.findById(patientId).orElseThrow();
-        patientRepository.deleteById(patientId);
+    public List<PatientResponseDto> getAllPatients(Integer pageNumber, Integer pageSize) {
+        return patientRepository.findAllPatients(PageRequest.of(pageNumber, pageSize))
+                .stream()
+                .map(patient -> modelMapper.map(patient, PatientResponseDto.class))
+                .collect(Collectors.toList());
     }
-
 }

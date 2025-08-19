@@ -1,6 +1,9 @@
 package com.chauhan.hospitalManagementSystem.repository;
 
 import com.chauhan.hospitalManagementSystem.entity.Patient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import jakarta.transaction.Transactional;
@@ -9,6 +12,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Arrays;
 import java.util.List;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
@@ -31,4 +35,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     @Query("select p from Patient p LEFT JOIN FETCH p.appointments")
     List<Patient> getAllPatientsWithAppointments();
+
+    @Query(value = "select * from patient", nativeQuery = true)
+    Page<Patient> findAllPatients(Pageable pageable);
 }

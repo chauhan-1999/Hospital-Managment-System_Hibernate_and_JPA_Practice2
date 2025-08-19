@@ -15,19 +15,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.RestController;
-
-/*
-   @Configuration -> spring knows that this is the config class & i have to search for the config here
-   PasswordEncoder -> we cannot store our passwords as plan txt, anyone can read it so endcode it using password encoder
-   UserDetailsService (interface) -> To verify the username and password
-   UserDetailsService <---- impl ---- InMemoryUserDetailsManager
-   InMemoryUserDetailsService -> stores users details in memory,useful for testing or small app
-*/
 
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig {
+    private final JwtAuthFilter jwtAuthFilter;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -36,9 +30,10 @@ public class WebSecurityConfig {
                         sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**", "/auth/**").permitAll() //public endpoints
-                        .requestMatchers("/admin/**").hasRole("ADMIN") //Only ADMIN
-                        .requestMatchers("/doctors/**").hasAnyRole("DOCTOR","ADMIN") //DOCTOR OR ADMIN
+//                        .requestMatchers("/admin/**").hasRole("ADMIN") //Only ADMIN
+//                        .requestMatchers("/doctors/**").hasAnyRole("DOCTOR","ADMIN") //DOCTOR OR ADMIN
                         .anyRequest().authenticated()) //All others must be authenticated
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 //                .formLogin(Customizer.withDefaults()) //Default login Form
                 .build();
     }
