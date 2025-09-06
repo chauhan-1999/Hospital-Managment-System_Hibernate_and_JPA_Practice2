@@ -1,5 +1,6 @@
 package com.chauhan.hospitalManagementSystem.entity;
 
+import com.chauhan.hospitalManagementSystem.enums.AuthProviderType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "users") //can not use the table name as user
+@Table(name = "users", indexes = {
+        @Index(name = "idx_provider_id_provider_type", columnList = "providerId, providerType")
+})
 public class User implements UserDetails {  //security
 
     @Id
@@ -22,9 +25,13 @@ public class User implements UserDetails {  //security
     private Long id;
 
     @JoinColumn(unique = true, nullable = false)
-    private String username;
+    private String username;//can behave like emailId or anyUniqueId
     private String password;
 
+    private String providerId;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProviderType providerType;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

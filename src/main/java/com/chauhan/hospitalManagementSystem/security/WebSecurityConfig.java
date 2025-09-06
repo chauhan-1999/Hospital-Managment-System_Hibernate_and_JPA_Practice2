@@ -1,6 +1,7 @@
 package com.chauhan.hospitalManagementSystem.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class WebSecurityConfig {
+
     private final JwtAuthFilter jwtAuthFilter;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -34,12 +39,13 @@ public class WebSecurityConfig {
 //                        .requestMatchers("/doctors/**").hasAnyRole("DOCTOR","ADMIN") //DOCTOR OR ADMIN
                         .anyRequest().authenticated()) //All others must be authenticated
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oAuth2 -> oAuth2
+                        .failureHandler((request, response, exception) -> {
+                            log.error("OAuth2 error: {}", exception.getMessage());
+                        })
+                        .successHandler(oAuth2SuccessHandler)
+                ).build();
 //                .formLogin(Customizer.withDefaults()) //Default login Form
-                .build();
-    }
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
     }
 
 //    @Bean
@@ -58,9 +64,4 @@ public class WebSecurityConfig {
 //        return new InMemoryUserDetailsManager(admin, user);
 //    }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        //BCrypt is the recommended encoder (secure & standard)
-        return new BCryptPasswordEncoder();
-    }
 }
