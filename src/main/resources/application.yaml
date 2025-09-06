@@ -9,11 +9,11 @@ spring:
 
     registration:
       google:
-        client-id: 551140670068-d76ljjlq672smpird6j43is52506p2l9.apps.googleusercontent.com
-        client-secret: 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
+        client-id: 551140670068-d76ljjlq672smpird6j43is52dkfjoidndfkjlnfkjndklfnmpdfm;l
+        client-secret: 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pfjeipodf
       github:
-        client-id: Ov23liVNppqyOZdOzv2H
-        client-secret: 62935867d02a851018d3c1dc176105b0628d7d92
+        client-id: Ov23liVNppqyOjndjfvndsknafo
+        client-secret: 62935867d02a851018d3idbnfkjdnsfnoodklsmfsd
       twitter:
         client-id: asdlfjasldf
         client-secret: asldfjalsdfj
